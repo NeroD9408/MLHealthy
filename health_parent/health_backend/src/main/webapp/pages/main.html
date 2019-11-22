@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- 页面meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>传智健康</title>
+    <meta name="description" content="传智健康">
+    <meta name="keywords" content="传智健康">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="../plugins/elementui/index.css">
+    <link id rel="stylesheet" href="../plugins/font-awesome/css/font-awesome.min.css">
+    <!--    <link rel="stylesheet" href="../css/style.css">-->
+    <style type="text/css">
+        .el-main {
+            position: absolute;
+            top: 70px;
+            bottom: 0px;
+            left: 200px;
+            right: 10px;
+            padding: 0;
+            color: #ffff00;
+            width: 1545px;
+        }
+    </style>
+
+</head>
+<body class="hold-transition skin-purple sidebar-mini">
+<div id="app">
+    <el-container>
+        <el-header class="main-header" style="height:70px;">
+            <nav class="navbar navbar-static-top" :class=''>
+                <!-- Logo -->
+                <a href="#" class="logo" style="text-align:center">
+                    <span class="logo-lg"><img src="../img/logo.png"></span>
+                </a>
+                <div class="right-menu">
+                    <span class="help"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>帮助</span>
+                    <el-dropdown class="avatar-container right-menu-item" trigger="click">
+                        <div class="avatar-wrapper">
+<!--                            <img src="../img/user2-160x160.jpg" class="user-avatar">-->
+                            <img :src="loginUser.headimg" class="user-avatar">
+                            {{loginUser.name}}
+                        </div>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item divided>
+                                <span style="display:block;" @click="userSettings()">修改密码</span>
+                            </el-dropdown-item>
+                            <el-dropdown-item divided>
+                                <span style="display:block;">
+                                    <a href="/logout.do">退出</a>
+                                </span>
+                            </el-dropdown-item>
+                            <el-dropdown-item divided>
+                                <span @click="changeStyle('style.css')" style="display:block;">切换蓝色经典</span>
+                            </el-dropdown-item>
+                            <el-dropdown-item divided>
+                                <span @click="changeStyle('style_yellow.css')" style="display:block;">切换黄色活力</span>
+                            </el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                </div>
+            </nav>
+        </el-header>
+        <el-container>
+            <el-aside width="200px">
+                <el-menu>
+                    <el-submenu v-for="menu in menuList" :index="menu.path">
+                        <template slot="title">
+                            <i class="fa" :class="menu.icon"></i>
+                            {{menu.title}}
+                        </template>
+                        <template v-for="child in menu.children">
+                            <el-menu-item :index="child.path">
+                                <a :href="child.linkUrl" target="right">{{child.title}}</a>
+                            </el-menu-item>
+                        </template>
+                    </el-submenu>
+                </el-menu>
+            </el-aside>
+            <el-container>
+                <iframe id="main" name="right" class="el-main" src="checkgroup.html" width="100%" height="784px"
+                        frameborder="0"></iframe>
+            </el-container>
+        </el-container>
+    </el-container>
+</div>
+</body>
+<!-- 引入组件库 -->
+<script src="../js/vue.js"></script>
+<script src="../plugins/elementui/index.js"></script>
+<script type="text/javascript" src="../js/jquery.min.js"></script>
+<script src="../js/axios-0.18.0.js"></script>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            menuList: [
+                {
+                    "path": "1",
+                    "title": "工作台",
+                    "icon": "fa-dashboard",
+                    "children": []
+                },
+                {
+                    "path": "2",
+                    "title": "会员管理",
+                    "icon": "fa-user-md",
+                    "children": [
+                        {
+                            "path": "/2-1",
+                            "title": "会员档案",
+                            "linkUrl": "member.html",
+                            "children": []
+                        },
+                        {
+                            "path": "/2-2",
+                            "title": "体检上传",
+                            "children": []
+                        },
+                        {
+                            "path": "/2-3",
+                            "title": "会员统计",
+                            "linkUrl": "all-item-list.html",
+                            "children": []
+                        },
+                    ]
+                },
+                {
+                    "path": "3",
+                    "title": "预约管理",
+                    "icon": "fa-tty",
+                    "children": [
+                        {
+                            "path": "/3-1",
+                            "title": "预约列表",
+                            "linkUrl": "ordersettinglist.html",
+                            "children": []
+                        },
+                        {
+                            "path": "/3-2",
+                            "title": "预约设置",
+                            "linkUrl": "ordersetting.html",
+                            "children": []
+                        },
+                        {
+                            "path": "/3-3",
+                            "title": "套餐管理",
+                            "linkUrl": "setmeal.html",
+                            "children": []
+                        },
+                        {
+                            "path": "/3-4",
+                            "title": "检查组管理",
+                            "linkUrl": "checkgroup.html",
+                            "children": []
+                        },
+                        {
+                            "path": "/3-5",
+                            "title": "检查项管理",
+                            "linkUrl": "checkitem.html",
+                            "children": []
+                        },
+                    ]
+                },
+                {
+                    "path": "4",
+                    "title": "健康评估",
+                    "icon": "fa-stethoscope",
+                    "children": [
+                        {
+                            "path": "/4-1",
+                            "title": "中医体质辨识",
+                            "linkUrl": "all-medical-list.html",
+                            "children": []
+                        },
+                    ]
+                },
+                {
+                    "path": "5",     //菜单项所对应的路由路径
+                    "title": "统计分析",     //菜单项名称
+                    "icon": "fa-heartbeat",
+                    "children": [//是否有子菜单，若没有，则为[]
+                        {
+                            "path": "/5-1",
+                            "title": "工作量统计",
+                            "linkUrl": "all-medical-list.html",
+                            "children": []
+                        }
+                    ]
+                }
+            ],
+            cssStyle: 'style.css',
+            loginUser:{}
+        },
+        //钩子函数，VUE对象初始化完成后自动执行
+        created() {
+            //页面加载时执行addStyle对页面进行样式的更改
+            this.addStyle();
+            //查询当前登录用户
+            this.findLoginUser();
+        },
+        methods: {
+            //加载样式
+            addStyle() {
+                axios.get('/style/getStyle.do').then((res) => {
+                    this.cssStyle = res.data.message;
+                    $("head").append('<link id="css_style" rel="stylesheet" href="../css/' + this.cssStyle + '">');
+                });
+            },
+            //切换样式
+            changeStyle(styleName) {
+                this.cssStyle = styleName;
+                axios.get('/style/changeStyle.do?styleName=' + styleName).then((res) => {
+                });
+                location.reload();
+            },
+            //更改main中显示的页面
+            userSettings() {
+                $("#main").prop('src', 'page-user.html');
+            },
+            //加载登录用户的用户信息
+            findLoginUser() {
+                axios.get('/user/findLoginUser.do').then((res) => {
+                    if (res.data.flag) {
+                        //查询用户信息成功
+                        this.loginUser = res.data.data;
+                    } else {
+                        //查询用户信息失败
+                        this.$message.error(res.data.message);
+                    }
+                })
+            }
+        }
+    });
+    /*$(function () {
+        var wd = 190;
+        alert($('body').width() - wd);
+        $(".el-main").css('width', $('body').width() - wd + 'px');
+    });*/
+</script>
+</html>
